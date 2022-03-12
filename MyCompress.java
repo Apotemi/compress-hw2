@@ -63,7 +63,7 @@ public class MyCompress {
 	private String generateBinary(int i, int base) {
 		String temp = "";
 		String tempReversed = "";
-		bitRequested = (int)Math.round((Math.log(character.size()) / Math.log(base)));
+		bitRequested = (int)Math.ceil((Math.log(character.size()) / Math.log(base)));
 
 		if(i == 0)
 			for(int m = 0; m < bitRequested; m++)
@@ -117,6 +117,7 @@ public class MyCompress {
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileOutputName + ".C"));
 
 			outputStream.writeInt(binaryCharacter.length);
+			outputStream.writeInt(binaryFile.length());
 			outputStream.writeInt(decimalFile.length);
 			outputStream.writeInt(bitRequested);
 
