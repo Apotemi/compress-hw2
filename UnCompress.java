@@ -1,3 +1,11 @@
+/**
+	14.03.2022
+	Bil211 Homework-2
+
+	Yusuf Aydin 211101019
+	yusufaydin@etu.edu.tr
+*/
+
 import java.util.ArrayList;
 import java.io.*;
 import java.util.Scanner;
@@ -11,7 +19,16 @@ public class UnCompress {
 	private String[] binChar;
 	private byte[] decArr;
 
-	public UnCompress(String fileInputName) {
+	/**
+		Reads
+		-Binary Character Array's length to know how many diffrent characters that have used,
+		-Binary File length to know the size of a file,
+		-Decimal File length to know how many byte's it is going to read;
+		-Requested Bit size to know how many digits every binary number have,
+		-Characters and corresponding Binary Numbers,
+		-Byte's Array.
+	*/
+	private void read(String fileInputName) {
 		try {	
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileInputName));
 
@@ -44,7 +61,13 @@ public class UnCompress {
 		}
 	}
 
-	public void unCompress() {
+	/**
+		Uncompresses given binary file and creates
+		corresponding text file.
+	*/
+	public void unCompress(String fileInputName) {
+		read(fileInputName);
+
 		String binaryFile = getBinaryFile();
 
 		String[] temp = new String[binaryFile.length() / bitRequested];
@@ -59,8 +82,13 @@ public class UnCompress {
 				if(binChar[j].equals(temp[i]))
 					unCompressedFile += character[j];
 		}
+	
+		createTextFile(unCompressedFile, fileInputName);
 	}
 
+	/**
+		Converts decimal numbers to corresponding binary numbers.
+	*/
 	private String getBinaryFile() {
 		int[] decIntArr = new int[decArrLength];
 
@@ -91,9 +119,22 @@ public class UnCompress {
 		return binaryFile;
 	}
 
+	/**
+		Creates new text file and writes uncompressed string.
+	*/
+	private void createTextFile(String unCompressedFile, String fileInputName) {
+		String fileOutputName = fileInputName.substring(0,fileInputName.length() - 2);
 
-	public static void main(String[] args) {
-		UnCompress hah = new UnCompress("haha.txt.C");
-		hah.unCompress();
+		PrintWriter outputStream = null;
+
+		try {
+			outputStream = new PrintWriter(new FileOutputStream(fileOutputName));
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
+	
+		outputStream.println(unCompressedFile);
+		outputStream.close();
 	}
 }
